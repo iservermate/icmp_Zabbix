@@ -1,0 +1,17 @@
+---
+  - name: Fix DB1 servers for startup error
+    ansible.builtin.lineinfile:
+      path: /var/lib/mysql/grastate.dat
+      regexp: '^safe_to_bootstrap: 0'
+      line: "safe_to_bootstrap: 1"
+    when: ansible_hostname == "icmp-db1"
+    notify: Restart Cluster
+
+  - name: Fix DB2 servers for startup error
+    ansible.builtin.lineinfile:
+      path: /var/lib/mysql/grastate.dat
+      regexp: '^safe_to_bootstrap: 0'
+      line: "safe_to_bootstrap: 1"
+    when: ansible_hostname == "icmp-db2"
+    # notify: Restart Database
+    notify: Restart Cluster

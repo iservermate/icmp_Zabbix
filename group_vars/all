@@ -1,0 +1,22 @@
+MyDomain: iservermate.lcoal
+IcmpUser: iservermate
+
+mysql_root_password: password
+
+
+db_name: zabbix
+db_user: zabbix
+db_pass: password
+
+ZabixServerIP: 192.168.0.62
+ZabbixProxyServerIp: 192.168.0.63
+ZproxyHostname: icmp-zabbix.iservermate.local
+
+ZabbixProxyDb: zabbix_proxy
+ZabbixProxyDbUser: zabbix
+ZabbixProxyDbPass: zabbix
+
+DbHostIp: 192.168.0.60
+
+
+DbServerName: icmp-db1.iservermate.local

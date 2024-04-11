@@ -1,0 +1,29 @@
+#GALERA CONF FILE
+  - name: Copy Galera configuration file
+    template:
+      src: galera.cnf.j2
+      dest: /etc/my.cnf.d/galera.cnf
+
+  - name: Copy Galera configuration file
+    template:
+      src: galera.cnf.j2
+      dest: /etc/my.cnf.d/galera.cnf
+
+#Configure cluster
+  - name: Stop DB services
+    service:
+      name: mysql
+      state: stopped
+
+  - name: Bring up  First nodes
+    command: sudo galera_new_cluster
+    when:  "'icmp-db1' in inventory_hostname"
+
+  - name: Bring up second node
+    service:
+      name: mariadb
+      state: started
+      enabled: yes
+    when:  "'icmp-db2' in inventory_hostname"
+
+#mysql -u root -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'"

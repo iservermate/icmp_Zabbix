@@ -1,0 +1,24 @@
+[all]
+icmp-db1 ansible_host=192.168.0.60
+icmp-db2 ansible_host=192.168.0.61
+icmp-zabbix ansible_host=192.168.0.62
+icmp-zproxy ansible_host=192.168.0.63
+icmp-client1 ansible_host=192.168.0.64
+icmp-client2 ansible_host=192.168.0.65
+
+[db]
+icmp-db1 ansible_host=192.168.0.60
+icmp-db2 ansible_host=192.168.0.61
+
+[zabix]
+icmp-zabbix ansible_host=192.168.0.62
+icmp-zproxy ansible_host=192.168.0.63
+
+[clients]
+icmp-client1 ansible_host=192.168.0.64
+icmp-client2 ansible_host=192.168.0.65
+
+[servers:children]
+db
+zabix
+clients

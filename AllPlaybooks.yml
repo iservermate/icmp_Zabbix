@@ -1,0 +1,4 @@
+---
+  - import_playbook: Database.yml
+  - import_playbook: Zabbix.yml
+  - import_playbook: Agent.yml

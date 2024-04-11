@@ -1,0 +1,89 @@
+---
+  - name: "Install MySQL packages"
+    yum:
+      name: "{{ item }}"
+      state: latest
+    loop: "{{ DbPackages }}"
+
+  - name: Install mariadb
+    yum:
+      name: 
+        - mariadb-server
+        - mariadb-server-galera            
+      state: latest
+
+
+  - name: Install Zabbix repo on DB servers
+    yum:
+      name: https://repo.zabbix.com/zabbix/6.4/rhel/8/x86_64/zabbix-release-6.4-1.el8.noarch.rpm
+      state: present
+      validate_certs: no
+      disable_gpg_check: yes
+
+  - name: Install Zabbix packages on icmp-db1 servers
+    yum:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - zabbix-server-mysql
+      - zabbix-sql-scripts
+      - zabbix-selinux-policy
+    when: ansible_hostname == "icmp-db1"
+
+  - name: Install Zabbix packages on icmp-db2 servers
+    yum:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - zabbix-server-mysql
+      - zabbix-sql-scripts
+      - zabbix-selinux-policy
+      - zabbix-proxy-mysql
+    when: ansible_hostname == "icmp-db2"
+
+  - name: update pip3
+    shell: pip3 install -U pip    
+
+  - name: Install Required MySQL pip modules
+    pip:
+      name:
+        - PyMySQL
+      state: present
+      executable: pip3
+  
+
+  # - name: Removing mysql ib_buffer_pool file
+  #   command: rm -rf /var/lib/mysql/ib_buffer_pool
+
+  - name: start mariadb
+    service:
+      name: mariadb
+      enabled: true
+      state: started
+
+  - name: mysql_root_password
+    mysql_user:
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      user: root
+      check_implicit_admin: true
+      password: "{{ mysql_root_password }}"
+      host: localhost
+    #notify: "mariadb restart"
+  
+  - name: Copy .my.cnf file with root password credentials
+    template: 
+      src: .my.cnf.j2 
+      dest: /root/.my.cnf
+      owner: root
+      mode: 0600
+    #notify: "mariadb restart"
+
+  - name: remove remote root
+    mysql_user:
+      check_implicit_admin: true
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      user: root
+      host: "{{ ansible_fqdn }}"
+      state: absent

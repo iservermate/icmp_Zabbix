@@ -1,0 +1,9 @@
+---
+# tasks file for roles/Zabbix
+  - import_tasks: zabbix.yml
+    tags:
+      - ZabbixInstall
+
+  - import_tasks: zproxy.yml
+    tags:
+      - ZproxyInstall

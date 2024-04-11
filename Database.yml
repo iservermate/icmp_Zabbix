@@ -1,0 +1,6 @@
+---
+  - hosts: icmp-db1,icmp-db2
+    gather_facts: on
+    become: yes
+    roles: 
+      - Database

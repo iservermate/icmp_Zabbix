@@ -1,0 +1,116 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/centos8"
+  #config.vm.box_version = "4.2.16"
+  config.vm.box_check_update = false
+
+  #DB1
+  config.vm.define "icmp-db1" do |node|
+  node.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.name = "icmp-db1"
+    vb.memory = "1048"
+    vb.cpus = "1"
+  end
+
+  #config.vm.define("icmp-db1") do |db1|
+    node.vm.hostname = "icmp-db1.iservermate.local"
+    node.vm.network "public_network", bridge: "en0: Ethernet", ip:"192.168.0.60"
+  end
+
+  config.vm.provision :ansible do |ansible|
+   ansible.playbook = "SystemConfiguration.yml"
+  end
+
+  #DB2
+  config.vm.define "icmp-db2" do |node|
+  node.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.name = "icmp-db2"
+    vb.memory = "1048"
+    vb.cpus = "1"
+  end
+  
+  #config.vm.define("icmp-db2") do |db2|
+    node.vm.hostname = "icmp-db2.iservermate.local"
+    node.vm.network "public_network", bridge: "en0: Ethernet", ip:"192.168.0.61"
+  end
+  
+  config.vm.provision :ansible do |ansible|
+   ansible.playbook = "SystemConfiguration.yml"
+  end
+
+  #ZabbixServer
+  config.vm.define "icmp-zabbix" do |node|
+  node.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.name = "icmp-zabbix"
+    vb.memory = "1048"
+    vb.cpus = "1"
+  end
+  
+  #config.vm.define("icmp-zabbix") do |zabbix|
+    node.vm.hostname = "icmp-zabbix.iservermate.local"
+    node.vm.network "public_network", bridge: "en0: Ethernet", ip:"192.168.0.62"
+  end
+  
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "SystemConfiguration.yml"
+  end
+  
+  #ZabbixProxy
+  config.vm.define "icmp-zproxy" do |node|
+    node.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.name = "icmp-zproxy"
+      vb.memory = "1048"
+      vb.cpus = "1"
+     end
+  
+  #config.vm.define("icmp-zproxy") do |zproxy|
+    node.vm.hostname = "icmp-zproxy.iservermate.local"
+    node.vm.network "public_network", bridge: "en0: Ethernet", ip:"192.168.0.63"
+  end
+  
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "SystemConfiguration.yml"
+  end
+
+  #Client-1
+  config.vm.define "icmp-client1" do |node|
+    node.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.name = "icmp-client1"
+      vb.memory = "1048"
+      vb.cpus = "1"
+     end
+  
+  #config.vm.define("icmp-client1") do |client1|
+    node.vm.hostname = "icmp-client1.iservermate.local"
+    node.vm.network "public_network", bridge: "en0: Ethernet", ip:"192.168.0.64"
+  end
+  
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "SystemConfiguration.yml"
+  end
+  
+  #Client-2
+  config.vm.define "icmp-client2" do |node|
+    node.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.name = "icmp-client2"
+      vb.memory = "1048"
+      vb.cpus = "1"
+     end
+  
+  #config.vm.define("icmp-client2") do |client2|
+    node.vm.hostname = "icmp-client2.iservermate.local"
+    node.vm.network "public_network", bridge: "en0: Ethernet", ip:"192.168.0.65"
+  end
+    
+    config.vm.provision :ansible do |ansible|
+    ansible.playbook = "SystemConfiguration.yml"
+  end
+end

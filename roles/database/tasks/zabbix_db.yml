@@ -1,19 +1,16 @@
 ---
   - name: Create {{ db_name }} database
     shell: mysql -e "create database {{ db_name }} character set utf8 collate utf8_bin;"
-    #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 
   - name: Create {{ db_name }} database user 
     shell: mysql -e "create user {{ db_user }}@localhost identified by '{{ db_pass }}';"
-    #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 
   - name: Grant privileges on  {{ db_name }} for database user
     shell: mysql -e "grant all privileges on {{ db_name }}.* to {{ db_user }}@localhost identified by '{{ db_pass }}';"
-    #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 
@@ -39,13 +36,11 @@
 
   - name: Create {{ db_name }} database user 
     shell: mysql -e "create user {{ db_user }}@{{ ZabixServerIP }} identified by '{{ db_pass }}';"
-    #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 
   - name: Grant privileges on {{ db_name }} from Zabbix server IP
     shell: mysql -e "grant all privileges on {{ db_name }}.* to {{ db_user }}@{{ ZabixServerIP }} identified by '{{ db_pass }}';"
-    #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 

@@ -13,5 +13,4 @@
       regexp: '^safe_to_bootstrap: 0'
       line: "safe_to_bootstrap: 1"
     when: ansible_hostname == "icmp-db2"
-    # notify: Restart Database
     notify: Restart Cluster

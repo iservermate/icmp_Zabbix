@@ -9,7 +9,7 @@
       src: galera.cnf.j2
       dest: /etc/my.cnf.d/galera.cnf
 
-#Configure cluster
+#GALERA CLUSTER
   - name: Stop DB services
     service:
       name: mysql
@@ -25,5 +25,3 @@
       state: started
       enabled: yes
     when:  "'icmp-db2' in inventory_hostname"
-
-#mysql -u root -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'"

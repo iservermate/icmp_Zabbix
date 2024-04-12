@@ -50,11 +50,6 @@
       content: Welcome to iServermate "{{ inventory_hostname }}" Server\n
       dest: /etc/motd
 
-  # - name: "Update /etc/hosts fie"
-  #   template:
-  #     src: hosts.j2
-  #     dest: /etc/hosts
-
   - name: Uninstall epel-repo
     yum:
       name: epel-release
@@ -79,25 +74,9 @@
         - yum-utils
         - rsync
         - python3-pip
-        #- pexpect
         - openssl
         - openssl-devel 
-        #- python-cryptography
-        #- pyOpenSSL
       state: latest
-
-  # - name: Check if a reboot is needed on all servers
-  #   register: reboot_required_file
-  #   stat: path=/var/run/reboot-required get_md5=no
-
-  # - name: Reboot the box if kernel updated
-  #   reboot:
-  #     msg: Reboot initiated by Ansible for kernel updates
-  #     connect_timeout: 5
-  #     reboot_timeout: 300
-  #     pre_reboot_delay: 0
-  #     post_reboot_delay: 30
-  #     test_command: uptime
 
   - name: See if Linux instance needs a reboot
     ansible.builtin.command: needs-restarting -r

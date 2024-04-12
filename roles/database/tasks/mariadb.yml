@@ -51,7 +51,6 @@
       state: present
       executable: pip3
   
-
   # - name: Removing mysql ib_buffer_pool file
   #   command: rm -rf /var/lib/mysql/ib_buffer_pool
 
@@ -69,7 +68,6 @@
       check_implicit_admin: true
       password: "{{ mysql_root_password }}"
       host: localhost
-    #notify: "mariadb restart"
   
   - name: Copy .my.cnf file with root password credentials
     template: 
@@ -77,7 +75,6 @@
       dest: /root/.my.cnf
       owner: root
       mode: 0600
-    #notify: "mariadb restart"
 
   - name: remove remote root
     mysql_user:

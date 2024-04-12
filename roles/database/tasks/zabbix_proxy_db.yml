@@ -1,18 +1,15 @@
 ---
   - name: Create {{ ZabbixProxyDb }} database
     shell: mysql -e "create database {{ ZabbixProxyDb }} character set utf8mb4 collate utf8mb4_bin;"
-    #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 
   - name: Create {{ ZabbixProxyDb }} database user 
     shell: mysql -e "create user {{ ZabbixProxyDbUser }}@{{ ZabixServerIP }} identified by '{{ ZabbixProxyDbPass }}';"
-    #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 
   - name: Grant privilges on {{ ZabbixProxyDb }} database from DB1 Server
-    #shell: mysql -e "grant all privileges on {{ ZabbixProxyDb }}.* to {{ ZabbixProxyDbUser }}@{{ ZabbixProxyServerIp }} identified by '{{ ZabbixProxyDbPass }}';"
     shell: mysql -e "grant all privileges on {{ ZabbixProxyDb }}.* to {{ ZabbixProxyDbUser }}@localhost identified by '{{ ZabbixProxyDbPass }}';"    
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
@@ -28,7 +25,6 @@
 
   - name: Export basic schema
     shell: cat /usr/share/zabbix-sql-scripts/mysql/proxy.sql | mysql --default-character-set=utf8mb4 --user={{ ZabbixProxyDbUser }} --password={{ ZabbixProxyDbPass }} {{ ZabbixProxyDb }}   #Enable this if doesn;t work
-    #shell: cat /usr/share/zabbix-sql-scripts/mysql/proxy.sql | mysql --default-character-set=utf8mb4 --user={{ db_user }} --password={{ db_pass}} {{ db_name }}
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 

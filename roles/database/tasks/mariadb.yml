@@ -1,5 +1,5 @@
 ---
-  - name: "Install MySQL packages"
+  - name: "Install MySQL Packages"
     yum:
       name: "{{ item }}"
       state: latest

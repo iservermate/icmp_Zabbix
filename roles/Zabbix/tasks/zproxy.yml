@@ -22,14 +22,6 @@
     when: ansible_hostname == "icmp-zproxy"
     notify: Restart Zabbix-Proxy
 
-  - name: Configure the database passwrod for Zabbix proxy server
-    ansible.builtin.lineinfile:
-      path: /etc/zabbix/zabbix_proxy.conf
-      regexp: '^# DBPassword='
-      line: DBPassword={{ db_pass }}
-    when: ansible_hostname == "icmp-zproxy"
-    notify: Restart Zabbix-Proxy
-
   - name: Configure the database Host for Zabbix proxy server
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
@@ -46,6 +38,30 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
+  - name: Configure the database name for Zabbix proxy server connectivity
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_proxy.conf
+      regexp: '^DBName=zabbix_proxy'
+      line: DBName={{ ZabbixProxyDb }}
+    when: ansible_hostname == "icmp-zproxy"
+    notify: Restart Zabbix-Proxy
+
+  - name: Configure the database user for Zabbix proxy server
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_proxy.conf
+      regexp: '^DBUser=zabbix'
+      line: DBUser={{ ZabbixProxyDbUser }}
+    when: ansible_hostname == "icmp-zproxy"
+    notify: Restart Zabbix-Proxy
+
+  - name: Configure the database password for Zabbix proxy server
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_proxy.conf
+      regexp: '^# DBPassword='
+      line: DBPassword={{ ZabbixProxyDbPass }}
+    when: ansible_hostname == "icmp-zproxy"
+    notify: Restart Zabbix-Proxy
+
   - name: Configure the Zabbix-Server IP in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
@@ -54,7 +70,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble Active proxy mdoe in confguration file
+  - name: Enable Active proxy mdoe in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^# ProxyMode=0'
@@ -62,7 +78,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble and set ProxyLocalBuffer in confguration file
+  - name: Enable and set ProxyLocalBuffer in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^# ProxyLocalBuffer=0'
@@ -70,7 +86,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble and set ProxyOfflineBuffer in confguration file
+  - name: Enable and set ProxyOfflineBuffer in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^# ProxyOfflineBuffer=1'
@@ -78,7 +94,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble and set ProxyConfigFrequency in confguration file
+  - name: Enable and set ProxyConfigFrequency in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^# ProxyConfigFrequency=10'
@@ -86,7 +102,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble and set StartIPMIPollers in confguration file
+  - name: Enable and set StartIPMIPollers in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^# StartIPMIPollers=0'
@@ -94,7 +110,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble and set StartVMwareCollectors in confguration file
+  - name: Enable and set StartVMwareCollectors in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^# StartVMwareCollectors=0'
@@ -102,7 +118,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble and set StartSNMPTrapper in confguration file
+  - name: Enable and set StartSNMPTrapper in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^# StartSNMPTrapper=0'
@@ -110,7 +126,7 @@
     when: ansible_hostname == "icmp-zproxy"        
     notify: Restart Zabbix-Proxy
 
-  - name: Enavble and set StatsAllowedIP in confguration file
+  - name: Enable and set StatsAllowedIP in confguration file
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_proxy.conf
       regexp: '^StatsAllowedIP=127.0.0.1'

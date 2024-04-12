@@ -50,10 +50,10 @@
       content: Welcome to iServermate "{{ inventory_hostname }}" Server\n
       dest: /etc/motd
 
-  - name: "Update /etc/hosts fie"
-    template:
-      src: hosts.j2
-      dest: /etc/hosts
+  # - name: "Update /etc/hosts fie"
+  #   template:
+  #     src: hosts.j2
+  #     dest: /etc/hosts
 
   - name: Uninstall epel-repo
     yum:

@@ -20,6 +20,6 @@
     tags:
       - mariadbZabbixDb
 
-  - import_tasks: remoteconnections.yml
+  - import_tasks: zabbix_proxy_db.yml
     tags:
-      - mariadbRemoteConnection
+      - mariadbZabbixProxyDb

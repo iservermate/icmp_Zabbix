@@ -11,8 +11,40 @@
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
 
-  - name: ensure {{ db_name }} database user is present
+  - name: Grant privileges on  {{ db_name }} for database user
     shell: mysql -e "grant all privileges on {{ db_name }}.* to {{ db_user }}@localhost identified by '{{ db_pass }}';"
+    #notify: "mariadb restart"
+    ignore_errors: yes
+    when: ansible_hostname == "icmp-db1"
+
+  - name: Flush privileges
+    shell: mysql -e "flush privileges;"
+    ignore_errors: yes
+    when: ansible_hostname == "icmp-db1"
+
+  - name: Enable log_bin_trust_function_creators option after importing database schema
+    shell: mysql -e "set global log_bin_trust_function_creators = 1;"
+    ignore_errors: yes
+    when: ansible_hostname == "icmp-db1"
+
+  - name: Export basic schema
+    shell: zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 --user={{ db_user }} --password={{ db_pass}} {{ db_name }}
+    ignore_errors: yes
+    when: ansible_hostname == "icmp-db1"
+
+  - name: Disable log_bin_trust_function_creators option after importing database schema
+    shell: mysql -e "set global log_bin_trust_function_creators = 0;"
+    ignore_errors: yes        
+    when: ansible_hostname == "icmp-db1"
+
+  - name: Create {{ db_name }} database user 
+    shell: mysql -e "create user {{ db_user }}@{{ ZabixServerIP }} identified by '{{ db_pass }}';"
+    #notify: "mariadb restart"
+    ignore_errors: yes
+    when: ansible_hostname == "icmp-db1"
+
+  - name: Grant privileges on {{ db_name }} from Zabbix server IP
+    shell: mysql -e "grant all privileges on {{ db_name }}.* to {{ db_user }}@{{ ZabixServerIP }} identified by '{{ db_pass }}';"
     #notify: "mariadb restart"
     ignore_errors: yes
     when: ansible_hostname == "icmp-db1"
@@ -25,14 +57,4 @@
   - name: Enable log_bin_trust_function_creators option after importing database schema.
     shell: mysql -e "set global log_bin_trust_function_creators = 1;"
     ignore_errors: yes
-    when: ansible_hostname == "icmp-db1"
-
-  - name: Export basic schema
-    shell: zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 --user={{ db_user }} --password={{ db_pass}} {{ db_name }}
-    ignore_errors: yes
-    when: ansible_hostname == "icmp-db1"
-
-  - name: Disable log_bin_trust_function_creators option after importing database schema.
-    shell: mysql -e "set global log_bin_trust_function_creators = 0;"
-    ignore_errors: yes        
     when: ansible_hostname == "icmp-db1"

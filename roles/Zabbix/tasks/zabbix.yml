@@ -54,6 +54,39 @@
     when: ansible_hostname == "icmp-zabbix"        
     notify: Restart Zabbix-server
 
+  - name: Configure the Zabbix-Server for VMWareTimeout
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_server.conf
+      regexp: '^ VMwareTimeout='
+      line:  VMwareTimeout=10
+    when: ansible_hostname == "icmp-zabbix"        
+    notify: Restart Zabbix-server
+
+  - name: Configure the Zabbix-Server for VMwareCacheSize
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_server.conf
+      regexp: '^ VMwareCacheSize='
+      line:  VMwareCacheSize=8M
+    when: ansible_hostname == "icmp-zabbix"        
+    notify: Restart Zabbix-server
+
+  - name: Configure the Zabbix-Server for VMwareFrequency
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_server.conf
+      regexp: '^ VMwareFrequency='
+      line:  VMwareFrequency=60
+    when: ansible_hostname == "icmp-zabbix"        
+    notify: Restart Zabbix-server
+
+  - name: Configure the Zabbix-Server for StartVMwareCollectors
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_server.conf
+      regexp: '^ StartVMwareCollectors='
+      line:  StartVMwareCollectors=0
+    when: ansible_hostname == "icmp-zabbix"        
+    notify: Restart Zabbix-server
+
+
   - name: Start Zabix service on icmp-zabbix
     ansible.builtin.service:
       name: "{{ item }}"

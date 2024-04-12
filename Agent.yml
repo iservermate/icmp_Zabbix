@@ -32,14 +32,32 @@
         ansible.builtin.lineinfile:
           path: /etc/zabbix/zabbix_agentd.conf
           regexp: '^Server=127.0.0.1'
-          line: Server={{ DbServerName }}
+          line: Server={{ ZproxyHostname }}
+        when: ansible_hostname != "icmp-zabbix"
         notify: Restart Zabbix
 
       - name: Configure Agent for monitoring
         ansible.builtin.lineinfile:
           path: /etc/zabbix/zabbix_agentd.conf
           regexp: '^ServerActive=127.0.0.1'
-          line: ServerActive={{ DbServerName }}
+          line: ServerActive={{ ZproxyHostname }}
+        when: ansible_hostname != "icmp-zabbix"
+        notify: Restart Zabbix
+
+      - name: Configure Agent for monitoring
+        ansible.builtin.lineinfile:
+          path: /etc/zabbix/zabbix_agentd.conf
+          regexp: '^Server=127.0.0.1'
+          line: Server={{ DbServerName }},127.0.0.1
+        when: ansible_hostname == "icmp-zabbix"
+        notify: Restart Zabbix
+
+      - name: Configure Agent for monitoring
+        ansible.builtin.lineinfile:
+          path: /etc/zabbix/zabbix_agentd.conf
+          regexp: '^ServerActive=127.0.0.1'
+          line: ServerActive={{ DbServerName }},127.0.0.1
+        when: ansible_hostname == "icmp-zabbix"
         notify: Restart Zabbix
 
       - name: Configure Agent for monitoring
@@ -48,6 +66,16 @@
           regexp: '^Hostname=Zabbix server'
           line: "#Hostname=Zabbix server"
         notify: Restart Zabbix
+
+      - name: Update /etc/hosts file
+        ansible.builtin.template:
+          src: hosts.j2
+          dest: /etc/hosts
+      - name: Disable Firewalld
+        service:
+          name: firewalld
+          state: stopped
+          enabled: no
 
     handlers:
       - name: Reload Zabbix Agent
